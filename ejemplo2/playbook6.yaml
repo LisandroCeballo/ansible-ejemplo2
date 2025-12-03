@@ -1,0 +1,16 @@
+# Validacion modelo de datos con json-schema - Reutilizacion
+# By Ed Scrimaglia
+---
+- name: Validacion con json-schema
+# hosts: indica sobre qué hosts se va a ejecutar ese playbook o ese bloque de tareas
+  hosts: localhost
+  gather_facts: false
+# Se definen dos variables, modelo_datos_path: ruta al archivo YAML del modelo y schema_path: ruta al archivo JSON Schema
+  vars:
+    modelo_datos_path: "./modelo_datos/modelo_datos.yaml"
+    schema_path: "./json_files/validator_modelo.json"
+# Ejecuta las tareas de tasks/validate.yaml
+# 
+  tasks:
+    - name: Incluir tarea de validacion
+      ansible.builtin.include_tasks: tasks/validate.yaml

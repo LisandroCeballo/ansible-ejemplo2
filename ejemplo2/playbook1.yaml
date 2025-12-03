@@ -1,0 +1,33 @@
+# Playbook utilizar estructuras condicionales en Ansible
+# By Ed Scrimaglia
+---
+- name: Estructura condicionales
+  hosts: cisco_ios
+  gather_facts: false
+
+# Variables locales del playbook
+# Definidas en la sección vars: dentro del mismo play
+# Sirven para controlar decisiones internas
+# Una es una bandera booleana que la utilizo en when
+# Device, no se esta utilizando en este playbook
+  vars:
+    ejecuta: true
+    device: "SW1"
+
+  vars_files:
+    - ./modelo_datos/modelo_datos.yaml
+
+  tasks:
+    - name: Mostrar estado de las interfaces
+      cisco.ios.ios_command:
+        commands:
+          - show ip interface brief
+# guarda toda la respuesta del módulo en una variable llamada salida_interfaces          
+      register: salida_interfaces
+      when: ejecuta and modelo.metadatos.version == '1.0'
+
+    - name: Imprimir estado de las interfaces
+      ansible.builtin.debug:
+# stdout_lines es la versión ya separada por líneas, más cómoda para leer en consola o recorrer
+        var: salida_interfaces.stdout_lines
+      when: ejecuta and modelo.metadatos.version == '1.0'

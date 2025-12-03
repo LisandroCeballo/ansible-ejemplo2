@@ -1,0 +1,20 @@
+# Task get time from SO
+# By Ed Scrimaglia
+---
+- command: "date '+%Y-%m-%d %H:%M:%S'"
+  register: date_utc
+  environment:
+    TZ: UTC
+  delegate_to: localhost
+
+- command: "date '+%Y-%m-%d %H:%M:%S'"
+  register: date_local
+  environment:
+    TZ: "{{model.metadatos.time_zone}}"
+  delegate_to: localhost
+
+
+  # timestamp.yaml
+  # Obtiene dos timestamps: - date_utc → fecha/hora en UTC y - date_local → fecha/hora en la zona horaria indicada por: model.metadatos.time_zone
+  # Este archivo NO se ejecuta automáticamente, Solo se ejecutaría si alguien hace: include_tasks: tasks/timestamp.yaml , Por ahora solo está disponible como archivo reutilizable
+  

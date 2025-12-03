@@ -1,0 +1,29 @@
+# Estructuras de progrmacion en Ansible
+# By Ed Scrimaglia
+---
+- name: Estructure de programacion - Loop
+  hosts: localhost
+  gather_facts: false
+
+  vars_files:
+    - ./modelo_datos/modelo_datos.yaml
+
+  tasks:
+    - name: Mostrar salida iteracion sobre lista de dispositivos
+      ansible.builtin.debug:
+        msg: " El nombre del dispositivo es: {{ item }}"
+      loop:
+        - "SW1"
+        - "SW3"
+        #- "SW-Bld_B"
+        #- "SW-Data_Center"
+        #- "SW-CORE_1"
+
+# Este task usa un loop que recorre una lista de strings (SW1, SW3)
+# Cada elemento de esta lista se guarda automáticamente en la variable reservada item
+
+# Durante cada iteración:
+# item toma el valor de uno de los elementos de la lista.
+# msg solo imprime ese valor
+
+# En este ejemplo no se usa loop_control, así que la etiqueta que Ansible muestra automáticamente es simplemente el valor de item

@@ -1,0 +1,89 @@
+modelo:
+  metadatos:
+    proyecto: "Simulacro de Caso de Uso"
+    version: "1.0"
+    autor: "Ed Scrimaglia"
+    fecha_creacion: "2024-06-15"
+    time_zone: "America/Argentina/Buenos_Aires"
+  infra_spec:
+    hosts_group: "cisco_ios"
+    devices:
+      - hostname: "SW1"
+        management:
+          ip: "192.168.130.240"
+          interface: "GigabitEthernet0/1"
+        connection:
+          device_type: "cisco_ios"
+          host: "192.168.130.240"
+          username: "cisco"
+          password: "cisco123"
+          global_delay_factor: 1
+          ssh_config_file: "~/.ssh/config"
+        interfaces:
+          - name: "GigabitEthernet0/0"
+            description: "Conexion a SW3"
+            mode: trunk
+            trunk_mode: auto
+            allowed_vlans: [10,20,30]
+            vlan: null
+          - name: "GigabitEthernet0/1"
+            description: "Conexion a VPX-1"
+            mode: access
+            trunk_mode: null
+            allowed_vlans: null
+            vlan: 10
+        vlans:
+          - id: 10
+            name: "Ingenieria"
+          - id: 20
+            name: "Produccion"
+          - id: 30
+            name: "Finanzas"
+        config_spec:
+          - data_path: "vlans"
+            template: "vlans.j2"
+            config_file: "vlan.cfg"
+          - data_path: "interfaces"
+            template: "int_trunk.j2"
+            config_file: "int_trunk.cfg"
+          - data_path: "interfaces"
+            template: "int_access.j2"
+            config_file: "int_access.cfg"
+      - hostname: "SW3"
+        management:
+          ip: "192.168.130.241"
+          interface: "GigabitEthernet0/2"
+        connection:
+          device_type: "cisco_ios"
+          host: "192.168.130.241"
+          username: "cisco"
+          password: "cisco123"
+          global_delay_factor: 1
+          ssh_config_file: "~/.ssh/config"
+        interfaces:
+          - name: "GigabitEthernet0/0"
+            description: "Conexion a SW1"
+            mode: "trunk"
+            trunk_mode: "auto"
+            allowed_vlans: [10,20,30]
+            vlan: null
+        vlans:
+          - id: 10
+            name: "Ingenieria"
+          - id: 20
+            name: "Produccion"
+          - id: 30
+            name: "Finanzas"
+        config_spec:
+          - type: "vlans"
+            data_path: "vlans"
+            template: "vlans.j2"
+            config_file: "vlan.cfg"
+          - type: "interfaces_trunk"
+            data_path: "interfaces"
+            template: "int_trunk.j2"
+            config_file: "int_trunk.cfg"
+          - type: "interfaces_access"
+            data_path: "interfaces"
+            template: "int_access.j2"
+            config_file: "int_access.cfg"
